@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizza Haven - Segar & Otentik</title>
+    <style>
+      /* --- PENGATURAN DASAR --- */
+      :root {
+        --primary: #e63946; /* Merah Tomat */
+        --secondary: #ffb703; /* Kuning Keju */
+        --dark: #1d3557;
+        --light: #f1faee;
+        --white: #ffffff;
+        --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        --radius: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fff8f0;
+        color: var(--dark);
+        line-height: 1.6;
+      }
+
+      /* --- HEADER & NAVIGASI --- */
+      header {
+        background-color: var(--white);
+        padding: 1rem 5%;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--primary);
+      }
+
+      .logo span {
+        color: var(--dark);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 20px;
+      }
+      nav a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 600;
+      }
+      nav a:hover {
+        color: var(--primary);
+      }
+
+      .cart-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .cart-count {
+        background: var(--secondary);
+        color: var(--dark);
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 0.8rem;
+      }
+
+      /* --- HERO SECTION --- */
+      .hero {
+        height: 500px;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+          url("https://i2-prod.hulldailymail.co.uk/news/uk-world-news/article7819084.ece/ALTERNATES/s1200/0_image001-16.jpg");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: var(--white);
+        padding: 0 20px;
+      }
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      }
+      .cta-btn {
+        background-color: var(--secondary);
+        color: var(--dark);
+        padding: 12px 30px;
+        text-decoration: none;
+        border-radius: 30px;
+        font-weight: bold;
+        display: inline-block;
+        margin-top: 20px;
+      }
+
+      /* --- ANIMASI PIZZA (STUDIO) --- */
+      #animation-showcase {
+        padding: 60px 20px;
+        text-align: center;
+      }
+      .pizza-stage {
+        width: 300px;
+        height: 300px;
+        margin: 0 auto 30px auto;
+        background: #e6c288;
+        border-radius: 50%;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1),
+          0 10px 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        border: 8px solid #d4a373;
+      }
+      .topping {
+        position: absolute;
+        opacity: 0;
+        transition: all 0.5s ease;
+      }
+      .topping.active {
+        opacity: 1;
+      }
+
+      .sauce-layer {
+        width: 100%;
+        height: 100%;
+        background: #d62828;
+        border-radius: 50%;
+        z-index: 1;
+      }
+      .cheese-layer {
+        width: 90%;
+        height: 90%;
+        top: 5%;
+        left: 5%;
+        background: #fb8500;
+        border-radius: 50%;
+        z-index: 2;
+        background-image: radial-gradient(#fff 10%, transparent 10%);
+        background-size: 10px 10px;
+      }
+      .pepperoni-item {
+        width: 40px;
+        height: 40px;
+        background: #9d0208;
+        border-radius: 50%;
+        z-index: 3;
+      }
+      .basil-item {
+        width: 20px;
+        height: 20px;
+        background: #2a9d8f;
+        border-radius: 20px 0;
+        z-index: 4;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .ctrl-btn {
+        border: 2px solid var(--primary);
+        background: transparent;
+        color: var(--primary);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+      .ctrl-btn:hover,
+      .ctrl-btn.active {
+        background: var(--primary);
+        color: white;
+      }
+
+      /* --- MENU --- */
+      .menu {
+        padding: 80px 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+      }
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+      }
+      .menu-item {
+        background: white;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+      }
+      .menu-img {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+      }
+      .menu-content {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .price-row {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .price {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: var(--primary);
+      }
+      .add-btn {
+        background: var(--dark);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .add-btn:hover {
+        background: var(--primary);
+      }
+
+      /* --- MODAL KERANJANG --- */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+      }
+      .modal.open {
+        display: flex;
+      }
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: var(--radius);
+        width: 90%;
+        max-width: 400px;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+      }
+      .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+      }
+      .checkout-btn {
+        width: 100%;
+        margin-top: 15px;
+        padding: 12px;
+        background: var(--secondary);
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      /* --- TOAST NOTIFIKASI --- */
+      #toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 3000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .toast {
+        background: var(--dark);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        animation: slideIn 0.3s forwards;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      footer {
+        background: var(--dark);
+        color: white;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      /* Mobile Friendly */
+      @media (max-width: 768px) {
+        nav ul {
+          display: none;
+        }
+        .hero h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toast-container"></div>
+
+    <header>
+      <div class="logo">Pizza<span>Haven</span></div>
+      <nav>
+        <ul>
+          <li><a href="#home">Beranda</a></li>
+          <li><a href="#animation-showcase">Buat Pizza</a></li>
+          <li><a href="#menu">Menu</a></li>
+        </ul>
+      </nav>
+      <button class="cart-btn" onclick="toggleCart()">
+        Keranjang <span id="cart-count" class="cart-count">0</span>
+      </button>
+    </header>
+
+    <section id="home" class="hero">
+      <div>
+        <h1>Pizza Segar, Hangat, Lezat</h1>
+        <p>Nikmati pizza terbaik di kota ini, dibuat dengan cinta.</p>
+        <a href="#menu" class="cta-btn">Pesan Sekarang</a>
+      </div>
+    </section>
+
+    <!-- Fitur Animasi Interaktif -->
+    <section id="animation-showcase">
+      <h2 class="section-title">Studio Pizza Interaktif</h2>
+      <p style="margin-bottom: 20px">
+        Klik tombol untuk menambah topping ke pizza!
+      </p>
+
+      <div class="pizza-stage" id="pizza-stage">
+        <div id="sauce" class="topping sauce-layer"></div>
+        <div id="cheese" class="topping cheese-layer"></div>
+        <div id="toppings-container"></div>
+      </div>
+
+      <div class="controls">
+        <button class="ctrl-btn" onclick="addTopping('sauce')">Saus</button>
+        <button class="ctrl-btn" onclick="addTopping('cheese')">Keju</button>
+        <button class="ctrl-btn" onclick="addTopping('pepperoni')">
+          Pepperoni
+        </button>
+        <button class="ctrl-btn" onclick="addTopping('basil')">Basil</button>
+        <button
+          class="ctrl-btn"
+          onclick="resetPizza()"
+          style="border-color: #666; color: #666"
+        >
+          Ulangi
+        </button>
+      </div>
+    </section>
+
+    <section id="menu" class="menu">
+      <h2 class="section-title">Menu Kami</h2>
+      <div class="menu-grid">
+        <div class="menu-item">
+          <img
+            src="https://cookingitalians.com/wp-content/uploads/2024/11/Margherita-Pizza.jpg"
+            alt="Margherita"
+            class="menu-img"
+          />
+          <div class="menu-content">
+            <h3>Margherita</h3>
+            <p>Tomat, mozzarella, basil.</p>
+            <div class="price-row">
+              <span class="price">Rp 85.000</span>
+              <button class="add-btn" onclick="addToCart('Margherita', 85000)">
+                Tambah
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <img
+            src="https://www.paesana.com/hubfs/Blog/pepperoni-pizza.jpg"
+            alt="Pepperoni"
+            class="menu-img"
+          />
+          <div class="menu-content">
+            <h3>Pepperoni</h3>
+            <p>Pepperoni pedas, keju.</p>
+            <div class="price-row">
+              <span class="price">Rp 110.000</span>
+              <button class="add-btn" onclick="addToCart('Pepperoni', 110000)">
+                Tambah
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <img
+            src="https://www.handi-foil.com/wp-content/uploads/2019/07/BBQ-Chicken-Pizza-16-of-19.jpg"
+            alt="BBQ"
+            class="menu-img"
+          />
+          <div class="menu-content">
+            <h3>BBQ Chicken</h3>
+            <p>Ayam asap, saus BBQ.</p>
+            <div class="price-row">
+              <span class="price">Rp 120.000</span>
+              <button
+                class="add-btn"
+                onclick="addToCart('BBQ Chicken', 120000)"
+              >
+                Tambah
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2023 Pizza Haven. Dibuat dengan sepenuh hati.</p>
+    </footer>
+
+    <!-- Modal Keranjang -->
+    <div id="cart-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="toggleCart()">&times;</span>
+        <h2>Keranjang</h2>
+        <div id="cart-items" style="margin-top: 20px"></div>
+        <div
+          class="cart-total"
+          id="cart-total"
+          style="margin-top: 20px; font-weight: bold"
+        >
+          Total: Rp 0
+        </div>
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+      </div>
+    </div>
+
+    <script>
+      /* --- LOGIKA KERANJANG --- */
+      let cart = [];
+      function addToCart(name, price) {
+        const item = cart.find((i) => i.name === name);
+        if (item) item.qty++;
+        else cart.push({ name, price, qty: 1 });
+        updateCart();
+        showToast(name + " ditambahkan!");
+      }
+      function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCart();
+      }
+      function updateCart() {
+        document.getElementById("cart-count").innerText = cart.reduce(
+          (a, b) => a + b.qty,
+          0
+        );
+        const list = document.getElementById("cart-items");
+        list.innerHTML = "";
+        let total = 0;
+        cart.forEach((i, idx) => {
+          total += i.price * i.qty;
+          list.innerHTML += `
+                    <div class="cart-item">
+                        <span>${i.name} (${i.qty}x)</span>
+                        <button onclick="removeFromCart(${idx})" style="color:red; border:none; background:none; cursor:pointer;">Hapus</button>
+                    </div>`;
+        });
+        document.getElementById("cart-total").innerText =
+          "Total: Rp " + total.toLocaleString("id-ID");
+      }
+      function toggleCart() {
+        document.getElementById("cart-modal").classList.toggle("open");
+      }
+      function checkout() {
+        if (cart.length === 0) return showToast("Keranjang kosong!");
+        alert("Terima kasih! Pesanan Anda sedang diproses.");
+        cart = [];
+        updateCart();
+        toggleCart();
+      }
+
+      /* --- LOGIKA ANIMASI PIZZA --- */
+      function addTopping(type) {
+        if (type === "sauce")
+          return document.getElementById("sauce").classList.add("active");
+        if (type === "cheese")
+          return document.getElementById("cheese").classList.add("active");
+
+        const container = document.getElementById("toppings-container");
+        const el = document.createElement("div");
+        el.className = `topping ${type}-item`;
+
+        // Posisi Acak
+        const angle = Math.random() * 6.28;
+        const radius = Math.random() * 100; // Jarak dari tengah
+        const x = 50 + radius * Math.cos(angle);
+        const y = 50 + radius * Math.sin(angle);
+
+        el.style.left = `calc(${x}% - 20px)`;
+        el.style.top = `calc(${y}% - 20px)`;
+        if (type === "basil")
+          el.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+        container.appendChild(el);
+        setTimeout(() => el.classList.add("active"), 10);
+      }
+      function resetPizza() {
+        document.getElementById("sauce").classList.remove("active");
+        document.getElementById("cheese").classList.remove("active");
+        document.getElementById("toppings-container").innerHTML = "";
+      }
+
+      /* --- NOTIFIKASI --- */
+      function showToast(msg) {
+        const t = document.createElement("div");
+        t.className = "toast";
+        t.innerText = msg;
+        document.getElementById("toast-container").appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+      }
+    </script>
+  </body>
+</html>
